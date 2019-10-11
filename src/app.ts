@@ -9,7 +9,7 @@ interface HttpError extends Error {
   data?: any
 }
 
-export const app = express()
+const app = express()
 
 app.get('/', (req: Request, res: Response) => {
   res.end('Hello world!')
@@ -27,3 +27,5 @@ app.use((err: HttpError, req: Request, res: Response, next: NextFunc) => {
     data: err.data
   })
 })
+
+export default app
