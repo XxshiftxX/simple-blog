@@ -4,7 +4,12 @@ type Request = express.Request
 type Response = express.Response
 type NextFunc = express.NextFunction
 
-interface HttpError extends Error {
+export class HttpError extends Error {
+  constructor (status: number, data?: any) {
+    super()
+    this.status = status
+    this.data = data
+  }
   status: number
   data?: any
 }
