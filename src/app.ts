@@ -1,4 +1,6 @@
 import * as express from 'express'
+import './models/post'
+import './models/user'
 
 type Request = express.Request
 type Response = express.Response
