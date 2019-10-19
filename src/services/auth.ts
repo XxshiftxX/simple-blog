@@ -1,10 +1,22 @@
-import { User, UserDB } from '../models/user'
 import { Request, Response, NextFunction } from 'express'
+import { createHmac } from 'crypto'
+
+import * as config from '../config'
+import { User, UserDB } from '../models/user'
 import { HttpError } from '../utils/error'
+
+const encryptValue = (value: string) => {
+  return createHmac('sha1', config.secret)
+    .update(value)
+    .digest('base64')
+}
 
 const getUser = (obj: any) => {
   const { email, password, nickname } = obj
-  return { email, password, nickname } as User
+
+  const encrypted = encryptValue(password)
+
+  return { email, password: encrypted, nickname } as User
 }
 
 const checkUserDuplicated = async (email: string) => {
@@ -18,12 +30,20 @@ const checkUserDuplicated = async (email: string) => {
 
 export const signUp = async (req: Request, res: Response, next: NextFunction) => {
   const user = getUser(req.body)
+  const info = {
+    data: {
+      email: req.body.email,
+      password: req.body.password,
+      nickname: req.body.nickname
+    }
+  }
 
   if (await checkUserDuplicated(user.email)) {
-    next(new HttpError(400, 'user already exist', user))
+    next(new HttpError(400, 'user already exist', info))
     return
   }
 
   await UserDB.create(user)
-  res.json({ data: user })
+
+  res.json(info)
 }
