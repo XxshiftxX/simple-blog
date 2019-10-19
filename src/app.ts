@@ -2,6 +2,7 @@ import * as express from 'express'
 
 import './models/post'
 import './models/user'
+import * as routes from './routes'
 import { HttpError } from './utils/error'
 
 type Request = express.Request
@@ -10,13 +11,16 @@ type NextFunc = express.NextFunction
 
 const app = express()
 
+app.use(express.json())
+
 app.get('/', (req: Request, res: Response) => {
   res.end('Hello world!')
 })
 
+app.use('/api/auth', routes.AuthRouter)
+
 app.use((req: Request, res: Response, next: NextFunc) => {
   let error = new HttpError(404, 'Not Found')
-  error.status = 404
   next(error)
 })
 

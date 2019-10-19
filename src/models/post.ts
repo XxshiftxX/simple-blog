@@ -36,7 +36,7 @@ class DB {
     return model.save()
   }
 
-  find (query: any) {
+  find (query: any): Promise<Post[]> {
     return new Promise((resolve, reject) => {
       PostModel.find(query, (err, data) => {
         if (err) {

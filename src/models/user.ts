@@ -20,7 +20,7 @@ class DB {
     return model.save()
   }
 
-  find (query: any) {
+  find (query: any): Promise<User[]> {
     return new Promise((resolve, reject) => {
       UserModel.find(query, (err, data) => {
         if (err) {
