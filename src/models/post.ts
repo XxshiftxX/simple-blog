@@ -37,7 +37,15 @@ class DB {
   }
 
   find (query: any) {
-    return PostModel.find(query)
+    return new Promise((resolve, reject) => {
+      PostModel.find(query, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(data)
+        }
+      })
+    })
   }
 
   update (post: Post, id: number) {
