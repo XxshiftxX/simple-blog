@@ -14,14 +14,16 @@ export interface Comment extends mongoose.Document {
 }
 
 const commentSchema = new mongoose.Schema({
-  email: { type: String , required: true },
-  password: { type: String, required: true },
+  id: { type: Number, auto: true },
+  title: { type: String , required: true },
+  content: { type: String, required: true },
   author: { type: String, required: true }
 })
 
 const postSchema = new mongoose.Schema({
-  email: { type: String , required: true },
-  password: { type: String, required: true },
+  id: { type: Number, auto: true },
+  title: { type: String , required: true },
+  content: { type: String, required: true },
   author: { type: String, required: true },
   comments: { type: [commentSchema], default: [] }
 })
