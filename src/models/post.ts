@@ -29,3 +29,24 @@ const postSchema = new mongoose.Schema({
 })
 
 export const PostModel: mongoose.Model<Post> = mongoose.model<Post>('Post', postSchema)
+
+class DB {
+  create (post: Post) {
+    const model = new PostModel(post)
+    return model.save()
+  }
+
+  find (query: any) {
+    return PostModel.find(query)
+  }
+
+  update (post: Post, id: number) {
+    return PostModel.update({ id }, { ...post })
+  }
+
+  delete (id: number) {
+    return PostModel.remove({ id })
+  }
+}
+
+export const PostDB = new DB()
