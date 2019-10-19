@@ -21,7 +21,15 @@ class DB {
   }
 
   find (query: any) {
-    return UserModel.find(query)
+    return new Promise((resolve, reject) => {
+      UserModel.find(query, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(data)
+        }
+      })
+    })
   }
 
   update (user: User) {
