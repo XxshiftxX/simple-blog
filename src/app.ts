@@ -1,15 +1,12 @@
 import * as express from 'express'
+
 import './models/post'
 import './models/user'
+import { HttpError } from './utils/error'
 
 type Request = express.Request
 type Response = express.Response
 type NextFunc = express.NextFunction
-
-interface HttpError extends Error {
-  status: number
-  data?: any
-}
 
 const app = express()
 
@@ -18,7 +15,7 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 app.use((req: Request, res: Response, next: NextFunc) => {
-  let error = new Error('Not Found') as HttpError
+  let error = new HttpError(404, 'Not Found')
   error.status = 404
   next(error)
 })
