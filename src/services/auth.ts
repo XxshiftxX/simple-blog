@@ -40,7 +40,7 @@ export const signUp = async (req: Request, res: Response, next: NextFunction) =>
   }
 
   if (await checkUserDuplicated(user.email)) {
-    next(new HttpError(500, 'user already exist', info))
+    next(new HttpError(400, 'user already exist', info))
     return
   }
 
@@ -52,7 +52,7 @@ export const signUp = async (req: Request, res: Response, next: NextFunction) =>
 export const duplicated = async (req: Request, res: Response, next: NextFunction) => {
   const { email } = req.query
   if (!email) {
-    next(new HttpError(500, 'no email'))
+    next(new HttpError(400, 'no email'))
     return
   }
 
