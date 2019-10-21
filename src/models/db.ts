@@ -1,7 +1,4 @@
-import { connect, connection, Document } from 'mongoose'
-
-import { User, UserModel } from './user'
-import { PostModel, Post } from './post'
+import { connect, connection } from 'mongoose'
 
 const connectDB = () => {
   const option = {

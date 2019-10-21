@@ -19,6 +19,7 @@
     "@types/node": "^12.7.12",
     "@types/supertest": "^2.0.8",
     "chai": "^4.2.0",
+    "crypto": "^1.0.1",
     "express": "^4.17.1",
     "mocha": "^6.2.1",
     "mongoose": "^5.7.4",
