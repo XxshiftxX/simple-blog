@@ -4,7 +4,6 @@ import { createHmac } from 'crypto'
 import * as config from '../config'
 import { User, UserDB } from '../models/user'
 import { HttpError } from '../utils/error'
-import { runInNewContext } from 'vm'
 
 const encryptValue = (value: string) => {
   return createHmac('sha1', config.secret)
@@ -12,7 +11,7 @@ const encryptValue = (value: string) => {
     .digest('base64')
 }
 
-const getUser = (obj: any) => {
+const getEncryptedUser = (obj: any) => {
   const { email, password, nickname } = obj
 
   const encrypted = encryptValue(password)
@@ -30,23 +29,16 @@ const checkUserDuplicated = async (email: string) => {
 }
 
 export const signUp = async (req: Request, res: Response, next: NextFunction) => {
-  const user = getUser(req.body)
-  const info = {
-    data: {
-      email: req.body.email,
-      password: req.body.password,
-      nickname: req.body.nickname
-    }
-  }
-
-  if (await checkUserDuplicated(user.email)) {
-    next(new HttpError(400, 'user already exist', info))
+  if (await checkUserDuplicated(req.body.email)) {
+    next(new HttpError(400, 'user already exist', { data: req.body }))
     return
   }
 
+  const user = getEncryptedUser(req.body)
+
   await UserDB.create(user)
 
-  res.json(info)
+  res.json({ data: req.body })
 }
 
 export const duplicated = async (req: Request, res: Response, next: NextFunction) => {
