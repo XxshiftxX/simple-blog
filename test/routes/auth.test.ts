@@ -42,7 +42,7 @@ describe('/auth route test', () => {
       userFindStub.resolves([{ email: 'testem', password: 'testpw' } as User])
 
       const data = { email: 'testem', password: 'testpw' }
-      const res = await req.post('/api/auth/signup').send(data).expect(500)
+      const res = await req.post('/api/auth/signup').send(data).expect(400)
 
       expect(res.body.message).to.eql('user already exist')
     })
