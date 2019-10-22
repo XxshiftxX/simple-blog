@@ -1,28 +1,26 @@
 import * as express from 'express'
 
+import './models/post'
+import './models/user'
+import * as routes from './routes'
+import { HttpError } from './utils/error'
+
 type Request = express.Request
 type Response = express.Response
 type NextFunc = express.NextFunction
 
-export class HttpError extends Error {
-  constructor (status: number, data?: any) {
-    super()
-    this.status = status
-    this.data = data
-  }
-  status: number
-  data?: any
-}
-
 const app = express()
+
+app.use(express.json())
 
 app.get('/', (req: Request, res: Response) => {
   res.end('Hello world!')
 })
 
+app.use('/api/auth', routes.AuthRouter)
+
 app.use((req: Request, res: Response, next: NextFunc) => {
-  let error = new Error('Not Found') as HttpError
-  error.status = 404
+  let error = new HttpError(404, 'Not Found')
   next(error)
 })
 
