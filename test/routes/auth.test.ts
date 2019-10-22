@@ -1,23 +1,24 @@
 import * as request from 'supertest'
 import * as sinon from 'sinon'
 import { expect } from 'chai'
+import { Hmac } from 'crypto'
 
 import app from '../../src/app'
 import { UserDB, User } from '../../src/models/user'
-import { Hmac } from 'crypto'
 
 describe('/auth route test', () => {
   const req = request(app)
-  const sandbox = sinon.createSandbox()
 
-  const userCreateStub = sandbox.stub(UserDB, 'create')
-  const userFindStub = sandbox.stub(UserDB, 'find')
-  const encrypteStub = sandbox.stub(Hmac.prototype, 'digest')
+  const userCreateStub = sinon.stub(UserDB, 'create')
+  const userFindStub = sinon.stub(UserDB, 'find')
+  const encrypteStub = sinon.stub(Hmac.prototype, 'digest')
 
-  describe('GET /auth/signup', () => {
+  beforeEach(() => {
+    sinon.reset()
+  })
+
+  describe('POST /auth/signup', () => {
     beforeEach(() => {
-      sandbox.reset()
-
       encrypteStub.returns('encrypted')
     })
 
@@ -49,10 +50,6 @@ describe('/auth route test', () => {
   })
 
   describe('GET /auth/duplicated', () => {
-    beforeEach(() => {
-      sandbox.reset()
-    })
-
     it('200 OK (duplicated)', async () => {
       userFindStub.resolves([{ email: 'test', password: 'test' } as User])
 
