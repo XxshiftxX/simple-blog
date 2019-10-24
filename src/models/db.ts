@@ -1,11 +1,13 @@
 import { connect, connection } from 'mongoose'
 
+import { dbURL } from '../config'
+
 const connectDB = () => {
   const option = {
     useNewUrlParser: true,
     useUnifiedTopology: true
   }
-  connect('mongodb://localhost:27017/zennvote', option)
+  connect(dbURL, option)
   .then(() => {
     console.log('MongoDB connected')
   })
